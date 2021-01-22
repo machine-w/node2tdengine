@@ -42,27 +42,50 @@ module.exports = class TaosRestful {
         }
         sqlStr += dbName
 
-        if(keep){
+        if(keep != null){
             sqlStr += ` KEEP ${keep}`
         }
-        if(comp){
+        if(comp != null){
             sqlStr += ` COMP ${comp}`
         }
-        if(replica){
+        if(replica != null) {
             sqlStr += ` REPLICA ${replica}`
         }
-        if(quorum){
+        if(quorum != null){
             sqlStr += ` QUORUM ${quorum}`
         }
-        if(blocks){
+        if(blocks != null){
             sqlStr += ` BLOCKS ${blocks}`
         }
-        if(update){
+        if(update != null){
             sqlStr += ` UPDATE 1`
         }
         console.log(sqlStr)
         return this.sendRequest(sqlStr)
    }
+
+   alterDatabase(dbName,keep=null,comp=null,replica=null,quorum=null,blocks=null){
+    let sqlStr = 'ALTER DATABASE '
+    sqlStr += dbName
+    if(keep != null){
+        sqlStr += ` KEEP ${keep}`
+    }
+    if(comp != null){
+        sqlStr += ` COMP ${comp}`
+    }
+    if(replica != null){
+        sqlStr += ` REPLICA ${replica}`
+    }
+    if(quorum != null){
+        sqlStr += ` QUORUM ${quorum}`
+    }
+    if(blocks != null){
+        sqlStr += ` BLOCKS ${blocks}`
+    }
+    console.log(sqlStr)
+    return this.sendRequest(sqlStr)
+}
+
    useDatabase(dbName){
     this.database = dbName
    }

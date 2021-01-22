@@ -11,6 +11,9 @@ tr.createDatabase('nodeadd2',true,1000,true).then(a =>
 tr.showDatabases().then(a =>
     console.log(a)
 )
+tr.alterDatabase('nodeadd2',1200,0).then(a =>
+    console.log(a)
+)
 // tr.rawSql('select * from dianli1.node_7').then(a =>
 //     console.log(a)
 // )
