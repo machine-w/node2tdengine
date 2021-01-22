@@ -60,7 +60,7 @@ module.exports = class TaosRestful {
         if(update != null){
             sqlStr += ` UPDATE 1`
         }
-        console.log(sqlStr)
+        // console.log(sqlStr)
         return this.sendRequest(sqlStr)
    }
 
@@ -82,7 +82,7 @@ module.exports = class TaosRestful {
     if(blocks != null){
         sqlStr += ` BLOCKS ${blocks}`
     }
-    console.log(sqlStr)
+    // console.log(sqlStr)
     return this.sendRequest(sqlStr)
 }
    useDatabase(dbName){
@@ -128,7 +128,7 @@ module.exports = class TaosRestful {
         fieldStr = fieldStr.slice(0,-1)
     }
     sqlStr += fieldStr + ` FROM ${dbN}.${tableName} `
-    if(where != null){
+    if(where){
         sqlStr +=` WHERE ${where} `
     }
     if(desc != null){
@@ -141,7 +141,7 @@ module.exports = class TaosRestful {
         sqlStr +=` OFFSET ${offset} `
     }
     
-    console.log(sqlStr)
+    // console.log(sqlStr)
     return this.sendRequest(sqlStr)
 
    }
