@@ -85,7 +85,6 @@ module.exports = class TaosRestful {
     console.log(sqlStr)
     return this.sendRequest(sqlStr)
 }
-
    useDatabase(dbName){
     this.database = dbName
    }
@@ -105,8 +104,8 @@ module.exports = class TaosRestful {
     let dbN = dbName ? dbName : this.database
     return this.sendRequest(`DESCRIBE ${dbN}.${tableName}`)
    }
+
    insertData(tableName,data,dbName=null){
-    
     let dbN = dbName ? dbName : this.database
     let fields = ''
     let values = ''
@@ -116,6 +115,35 @@ module.exports = class TaosRestful {
     }
     // console.log(`INSERT INTO ${dbN}.${tableName} (${fields.slice(0,-1)}) VALUES (${values.slice(0,-1)})` )
     return this.sendRequest(`INSERT INTO ${dbN}.${tableName} (${fields.slice(0,-1)}) VALUES (${values.slice(0,-1)})`)
+   }
+   selectData(tableName,fields=null,where=null,limit =null,offset = null,desc =null,dbName=null){
+    let dbN = dbName ? dbName : this.database
+    let sqlStr = 'SELECT '
+    let fieldStr= '*'
+    if(fields && fields.length>0){
+        fieldStr= ''
+        fields.forEach(function(field){
+            fieldStr += field + ','
+        });
+        fieldStr = fieldStr.slice(0,-1)
+    }
+    sqlStr += fieldStr + ` FROM ${dbN}.${tableName} `
+    if(where != null){
+        sqlStr +=` WHERE ${where} `
+    }
+    if(desc != null){
+        sqlStr +=` ORDER BY ${desc} DESC `
+    }
+    if(limit != null){
+        sqlStr +=` LIMIT ${limit} `
+    }
+    if(offset != null){
+        sqlStr +=` OFFSET ${offset} `
+    }
+    
+    console.log(sqlStr)
+    return this.sendRequest(sqlStr)
+
    }
    rawSql(sqlStr){
     return this.sendRequest(sqlStr)
