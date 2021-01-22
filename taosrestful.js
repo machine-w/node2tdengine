@@ -23,7 +23,7 @@ module.exports = class TaosRestful {
             // console.log(res.data.head)
             let head  = res.data.head
             let resData = res.data.data.map(item => Object.fromEntries(head.map((a,b)=>[a,item[b]])))
-            return  {'res':true,'count':res.data.rows,'data':resData}
+            return  {'res':true,'count':res.data.rows,'data':resData,'heads':head}
         }else{
             return {'res':false,'msg':res.data.desc,'code':res.data.code}
         }
