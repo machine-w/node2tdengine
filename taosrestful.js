@@ -22,21 +22,46 @@ module.exports = class TaosRestful {
             // console.log(res.data.rows)
             // console.log(res.data.head)
             let head  = res.data.head
-            // console.log(head)
             let resData = res.data.data.map(item => Object.fromEntries(head.map((a,b)=>[a,item[b]])))
             return  {'res':true,'count':res.data.rows,'data':resData}
         }else{
             return {'res':false,'msg':res.data.desc,'code':res.data.code}
         }
     } catch (err) {
-        // console.log(err.response.data)
         return {'res':false,'msg':err.response.data.desc,'code':err.response.data.code}
-        // alert('请求出错！')
     }
 
    }
    showDatabases(){
     return this.sendRequest('SHOW DATABASES')
+   }
+   createDatabase(dbName,safe=true,keep= null,update=false,comp=null,replica=null,quorum=null,blocks=null){
+        let sqlStr = 'CREATE DATABASE '
+        if(safe){
+            sqlStr += 'IF NOT EXISTS '
+        }
+        sqlStr += dbName
+
+        if(keep){
+            sqlStr += ` KEEP ${keep}`
+        }
+        if(comp){
+            sqlStr += ` COMP ${comp}`
+        }
+        if(replica){
+            sqlStr += ` REPLICA ${replica}`
+        }
+        if(quorum){
+            sqlStr += ` QUORUM ${quorum}`
+        }
+        if(blocks){
+            sqlStr += ` BLOCKS ${blocks}`
+        }
+        if(update){
+            sqlStr += ` UPDATE 1`
+        }
+        console.log(sqlStr)
+        return this.sendRequest(sqlStr)
    }
    useDatabase(dbName){
     this.database = dbName
@@ -50,8 +75,7 @@ module.exports = class TaosRestful {
    }
    showTables(dbName=null){
     let dbN = dbName ? dbName : this.database
-    console.log(`SHOW ${dbN}.TABLES`)
-
+    // console.log(`SHOW ${dbN}.TABLES`)
     return this.sendRequest(`SHOW ${dbN}.TABLES`)
    }
    disTable(tableName,dbName=null){
@@ -67,14 +91,7 @@ module.exports = class TaosRestful {
         fields += key + ','
         values += value + ','
     }
-    // fields = fields.slice(0,-1)
-    // values = values.slice(0,-1)
-    // for (const key of data) {
-    //     fields += key + ','
-    //     values += data[key] + ','
-    // // }substr(1,2)
-    // console.log(fields,values)
-    console.log(`INSERT INTO ${dbN}.${tableName} (${fields.slice(0,-1)}) VALUES (${values.slice(0,-1)})` )
+    // console.log(`INSERT INTO ${dbN}.${tableName} (${fields.slice(0,-1)}) VALUES (${values.slice(0,-1)})` )
     return this.sendRequest(`INSERT INTO ${dbN}.${tableName} (${fields.slice(0,-1)}) VALUES (${values.slice(0,-1)})`)
    }
    rawSql(sqlStr){
